@@ -3,12 +3,16 @@ import { TouchableOpacity, StyleSheet, Text, View, Button } from 'react-native';
 
 
 
+
 export default class Timer extends Component {
 
     state = {
-        minutes: '25',
-        seconds: '00',
-        interval: ''
+        minutes: '00',
+        seconds: '03',
+        interval: '',
+        pomodoro: 0,
+        color: 'red',
+        break: false
     }
 
 
@@ -17,53 +21,79 @@ export default class Timer extends Component {
     }
 
 
-    timer = () => {
-
-        let { minutes, seconds } = this.state;
-
-
-
-
-        if (seconds === '00') {
+    checkPomodoro = () => {
+        if (this.state.pomodoro === 3 && this.state.minutes === '00' && this.state.seconds === '00' && this.state.break === false && this.state.interval) {
+            clearInterval(this.state.interval);
             this.setState({
-                minutes: this.pad(minutes - 1),
-                seconds: 59
-
+                minutes: '00',
+                seconds: '03',
+                color: 'purple',
+                pomodoro: 0,
+                break: true,
+                interval: '',
             })
-        } else {
+
+        } else if (this.state.minutes === '00' && this.state.seconds === '00' && this.state.break === false && this.state.interval) {
+            clearInterval(this.state.interval);
             this.setState({
-                seconds: this.pad(seconds - 1)
+                minutes: '00',
+                seconds: '03',
+                color: 'green',
+                break: true,
+                interval: '',
+            })
+
+        } else if (this.state.minutes === '00' && this.state.seconds === '00' && this.state.break === true) {
+            clearInterval(this.state.interval);
+            this.setState({
+                minutes: this.pad(0),
+                seconds: this.pad(3),
+                pomodoro: this.state.pomodoro + 1,
+                color: 'red',
+                break: false,
+                interval: '',
             })
         }
 
+    }
+
+
+    timer = () => {
+        this.checkPomodoro();
+        if (this.state.seconds === '00') {
+            this.setState({
+                minutes: this.pad(this.state.minutes - 1),
+                seconds: '59'
+            })
+        } else {
+            this.setState({
+                seconds: this.pad(this.state.seconds - 1)
+            })
+        }
 
 
     }
 
     start = () => {
         if (!this.state.interval) {
-            console.log('clicado')
-            this.timer();
             let myInterval = setInterval(this.timer, 1000)
             this.setState({
                 interval: myInterval
             })
-
         }
-
-
-
     }
 
     reset = () => {
-        
         if (this.state.interval) {
             clearInterval(this.state.interval);
         }
         this.setState({
-            minutes: '25',
-            seconds: '00',
-            interval: false
+            minutes: '00',
+            seconds: '03',
+            interval: false,
+            pomodoro: 0,
+            break: false,
+            interval: '',
         })
     }
 
@@ -71,7 +101,7 @@ export default class Timer extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, { backgroundColor: this.state.color }]}>
                 <Text style={styles.timer}>{this.state.minutes}:{this.state.seconds}</Text>
 
                 <View style={styles.buttonscontainer}>
@@ -85,7 +115,7 @@ export default class Timer extends Component {
                     <TouchableOpacity onPress={this.reset}>
                         <Text
                             style={styles.button}>
-                            Stop
+                            Reset
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -110,7 +140,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 20,
         textAlign: 'center',
-        width: 60,
+        width: 70,
         alignSelf: 'stretch',
         borderRadius: 4,
         borderColor: 'white',
@@ -119,12 +149,10 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     container: {
-        backgroundColor: 'red',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         width: 500,
-        backgroundColor: 'red',
     },
     timer: {
         color: 'white',
