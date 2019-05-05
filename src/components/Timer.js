@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, StyleSheet, Text, View, Button } from 'react-native';
 
+import { workPhrases, breakPhrases } from './utils/phrases'
+
 
 
 
 export default class Timer extends Component {
 
     state = {
-        minutes: '00',
+        minutes: '05',
         seconds: '03',
         interval: '',
         pomodoro: 0,
-        color: 'red',
-        break: false
+        color: '#E98C8C',
+        break: false,
+        phrase: workPhrases[Math.floor(Math.random() * 2)]
     }
 
 
@@ -27,10 +30,11 @@ export default class Timer extends Component {
             this.setState({
                 minutes: '00',
                 seconds: '03',
-                color: 'purple',
+                color: '#B076AB',
                 pomodoro: 0,
                 break: true,
                 interval: '',
+                phrase: breakPhrases[Math.floor(Math.random() * 6)]
             })
 
         } else if (this.state.minutes === '00' && this.state.seconds === '00' && this.state.break === false && this.state.interval) {
@@ -38,9 +42,10 @@ export default class Timer extends Component {
             this.setState({
                 minutes: '00',
                 seconds: '03',
-                color: 'green',
+                color: '#95B275',
                 break: true,
                 interval: '',
+                phrase: breakPhrases[Math.floor(Math.random() * 6)]
             })
 
         } else if (this.state.minutes === '00' && this.state.seconds === '00' && this.state.break === true) {
@@ -49,9 +54,10 @@ export default class Timer extends Component {
                 minutes: this.pad(0),
                 seconds: this.pad(3),
                 pomodoro: this.state.pomodoro + 1,
-                color: 'red',
+                color: '#E98C8C',
                 break: false,
                 interval: '',
+                phrase: workPhrases[Math.floor(Math.random() * 8)]
             })
         }
 
@@ -102,6 +108,10 @@ export default class Timer extends Component {
     render() {
         return (
             <View style={[styles.container, { backgroundColor: this.state.color }]}>
+
+                <View style={styles.phraseContainer}>
+                    <Text style={styles.phrase}> {this.state.phrase}</Text>
+                </View>
                 <Text style={styles.timer}>{this.state.minutes}:{this.state.seconds}</Text>
 
                 <View style={styles.buttonscontainer}>
@@ -127,6 +137,16 @@ export default class Timer extends Component {
 
 
 const styles = StyleSheet.create({
+    phraseContainer: {  
+        height: 200,
+        
+    },
+    phrase: {
+        width: 300,
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 20
+    },
     buttonscontainer: {
         flexDirection: 'row',
         borderRadius: 4,
