@@ -103,7 +103,7 @@ export default class Timer extends Component {
         }
         this.setState({
             minutes: '25',
-            seconds: '01',
+            seconds: '00',
             interval: false,
             pomodoro: 0,
             break: false,
