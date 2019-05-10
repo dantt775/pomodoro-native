@@ -1,21 +1,29 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, StyleSheet, Text, View, Button } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, View, Alert } from 'react-native';
 
-import { workPhrases, breakPhrases } from './utils/phrases'
-
+import { workPhrases, breakPhrases, randomPhrase } from './utils/phrases';
+import Info from './Info';
 
 
 
 export default class Timer extends Component {
+    constructor(props) {
+        super(props);
+    }
 
     state = {
-        minutes: '05',
-        seconds: '03',
+        minutes: '25',
+        seconds: '00',
         interval: '',
         pomodoro: 0,
-        color: '#E98C8C',
+        color: this.props.parentColor,
         break: false,
-        phrase: workPhrases[Math.floor(Math.random() * 2)]
+        phrase: randomPhrase('work'),
+        modalVisible: false,
+    }
+
+    setModalVisible(visible) {
+        this.setState({ modalVisible: visible });
     }
 
 
@@ -25,39 +33,38 @@ export default class Timer extends Component {
 
 
     checkPomodoro = () => {
-        if (this.state.pomodoro === 3 && this.state.minutes === '00' && this.state.seconds === '00' && this.state.break === false && this.state.interval) {
+        if (this.state.pomodoro === 0 && this.state.minutes === '00' && this.state.seconds === '00' && this.state.break === false && this.state.interval) {
             clearInterval(this.state.interval);
             this.setState({
-                minutes: '00',
-                seconds: '03',
-                color: '#B076AB',
+                minutes: '15',
+                seconds: '01',
+                color: this.props.parentColor('#B076AB'),
                 pomodoro: 0,
                 break: true,
                 interval: '',
-                phrase: breakPhrases[Math.floor(Math.random() * 6)]
+                phrase: randomPhrase('break')
             })
-
+                
         } else if (this.state.minutes === '00' && this.state.seconds === '00' && this.state.break === false && this.state.interval) {
             clearInterval(this.state.interval);
             this.setState({
-                minutes: '00',
-                seconds: '03',
-                color: '#95B275',
+                minutes: '05',
+                seconds: '01',
+                color: this.props.parentColor('#95B275'),
                 break: true,
                 interval: '',
-                phrase: breakPhrases[Math.floor(Math.random() * 6)]
+                phrase: randomPhrase('break')
             })
-
         } else if (this.state.minutes === '00' && this.state.seconds === '00' && this.state.break === true) {
             clearInterval(this.state.interval);
             this.setState({
-                minutes: this.pad(0),
-                seconds: this.pad(3),
+                minutes: '25',
+                seconds: '01',
                 pomodoro: this.state.pomodoro + 1,
-                color: '#E98C8C',
+                color: this.props.parentColor('#E98C8C'),
                 break: false,
                 interval: '',
-                phrase: workPhrases[Math.floor(Math.random() * 8)]
+                phrase: randomPhrase('work')
             })
         }
 
@@ -84,23 +91,29 @@ export default class Timer extends Component {
         if (!this.state.interval) {
             let myInterval = setInterval(this.timer, 1000)
             this.setState({
-                interval: myInterval
+                interval: myInterval,
             })
         }
     }
 
     reset = () => {
+        
         if (this.state.interval) {
             clearInterval(this.state.interval);
         }
         this.setState({
-            minutes: '00',
-            seconds: '03',
+            minutes: '25',
+            seconds: '01',
             interval: false,
             pomodoro: 0,
             break: false,
             interval: '',
+            color: this.props.parentColor('#E98C8C'),
+            phrase: randomPhrase('work')
+            
         })
+        
+        
     }
 
 
@@ -108,6 +121,8 @@ export default class Timer extends Component {
     render() {
         return (
             <View style={[styles.container, { backgroundColor: this.state.color }]}>
+
+
 
                 <View style={styles.phraseContainer}>
                     <Text style={styles.phrase}> {this.state.phrase}</Text>
@@ -128,18 +143,18 @@ export default class Timer extends Component {
                             Reset
                         </Text>
                     </TouchableOpacity>
+
                 </View>
+               
             </View>
         )
     }
 }
 
-
-
 const styles = StyleSheet.create({
-    phraseContainer: {  
+    phraseContainer: {
         height: 200,
-        
+
     },
     phrase: {
         width: 300,
