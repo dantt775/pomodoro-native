@@ -1,8 +1,19 @@
 package com.pomodoronative;
 
 import com.facebook.react.ReactActivity;
+import android.os.Bundle;
+import android.view.WindowManager;
 
 public class MainActivity extends ReactActivity {
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+    }
 
     /**
      * Returns the name of the main component registered from JavaScript.
