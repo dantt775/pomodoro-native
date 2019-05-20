@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, StyleSheet, Text, View, Alert } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, View, Animated } from 'react-native';
 
-import { workPhrases, breakPhrases, randomPhrase } from './utils/phrases';
+import Phrases, { randomPhrase }  from './utils/Phrases';
 import Info from './Info';
 
 
@@ -18,7 +18,7 @@ export default class Timer extends Component {
         pomodoro: 0,
         color: this.props.parentColor,
         break: false,
-        phrase: randomPhrase('work'),
+        phrase: 'work',
         modalVisible: false,
     }
 
@@ -42,7 +42,7 @@ export default class Timer extends Component {
                 pomodoro: 0,
                 break: true,
                 interval: '',
-                phrase: randomPhrase('break')
+                phrase: 'break'
             })
                 
         } else if (this.state.minutes === '00' && this.state.seconds === '00' && this.state.break === false && this.state.interval) {
@@ -53,7 +53,7 @@ export default class Timer extends Component {
                 color: this.props.parentColor('#95B275'),
                 break: true,
                 interval: '',
-                phrase: randomPhrase('break')
+                phrase: 'break'
             })
         } else if (this.state.minutes === '00' && this.state.seconds === '00' && this.state.break === true) {
             clearInterval(this.state.interval);
@@ -64,7 +64,7 @@ export default class Timer extends Component {
                 color: this.props.parentColor('#E98C8C'),
                 break: false,
                 interval: '',
-                phrase: randomPhrase('work')
+                phrase: 'work'
             })
         }
 
@@ -109,7 +109,7 @@ export default class Timer extends Component {
             break: false,
             interval: '',
             color: this.props.parentColor('#E98C8C'),
-            phrase: randomPhrase('work')
+            phrase: 'work'
             
         })
         
@@ -125,7 +125,7 @@ export default class Timer extends Component {
 
 
                 <View style={styles.phraseContainer}>
-                    <Text style={styles.phrase}> {this.state.phrase}</Text>
+                    <Phrases phrase={this.state.phrase}/>
                 </View>
                 <Text style={styles.timer}>{this.state.minutes}:{this.state.seconds}</Text>
 
@@ -153,11 +153,11 @@ export default class Timer extends Component {
 
 const styles = StyleSheet.create({
     phraseContainer: {
-        height: 200,
+        height: 120,
 
     },
     phrase: {
-        width: 300,
+        width: 250,
         color: 'white',
         textAlign: 'center',
         fontSize: 20
@@ -173,9 +173,10 @@ const styles = StyleSheet.create({
         marginTop: 20,
         padding: 7,
         color: 'white',
-        fontSize: 20,
+        fontSize: 25,
         textAlign: 'center',
-        width: 70,
+        height: 50,
+        width: 120,
         alignSelf: 'stretch',
         borderRadius: 4,
         borderColor: 'white',

@@ -1,4 +1,35 @@
-export const workPhrases = [
+
+
+import React, { Component } from 'react';
+import {  Text, Animated, StyleSheet } from 'react-native';
+export default class Phrases extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    state = {
+        type : 'work'
+    }
+
+    render() {
+        return (
+            <Text style={styles.phrase}>{randomPhrase(this.props.phrase)}</Text>
+        )
+
+
+    }
+}
+
+
+const styles = StyleSheet.create({
+    phrase: {
+        width: 250,
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 20
+    },
+})
+const workPhrases = [
     'The elevator to success is out of order. You’ll have to use the stairs, one step at a time.',
     'Think like a proton. Always positive.',
     'People say nothing is impossible, but I do nothing every day.',
@@ -9,7 +40,7 @@ export const workPhrases = [
 
 ]
 
-export const breakPhrases = [
+const breakPhrases = [
     'Try to pause each day and take a walk to view nature.',
     'When’s the last time you disconnected and took a vacation?',
     'Rest will make you do things better.',
@@ -27,3 +58,4 @@ export let randomPhrase = (type) => {
         return workPhrases[Math.floor(Math.random() * workPhrases.length)]
     }
 }
+
