@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, StyleSheet, Text, View, Animated } from 'react-native';
 
+
 import Phrases, { randomPhrase }  from './utils/Phrases';
 import Info from './Info';
 
@@ -21,6 +22,7 @@ export default class Timer extends Component {
         phrase: 'work',
         modalVisible: false,
     }
+    
 
     setModalVisible(visible) {
         this.setState({ modalVisible: visible });
@@ -33,7 +35,7 @@ export default class Timer extends Component {
 
 
     checkPomodoro = () => {
-        if (this.state.pomodoro === 0 && this.state.minutes === '00' && this.state.seconds === '00' && this.state.break === false && this.state.interval) {
+        if (this.state.pomodoro === 3 && this.state.minutes === '00' && this.state.seconds === '00' && this.state.break === false && this.state.interval) {
             clearInterval(this.state.interval);
             this.setState({
                 minutes: '15',
@@ -92,6 +94,7 @@ export default class Timer extends Component {
             let myInterval = setInterval(this.timer, 1000)
             this.setState({
                 interval: myInterval,
+                phrase: 'work'
             })
         }
     }

@@ -1,22 +1,44 @@
 
 
 import React, { Component } from 'react';
-import {  Text, Animated, StyleSheet } from 'react-native';
+import { Text, Animated, StyleSheet } from 'react-native';
+
 export default class Phrases extends Component {
     constructor(props) {
+
         super(props);
+
     }
 
     state = {
-        type : 'work'
+        type: 'work',
+        interval: '',
+        phrase: workPhrases[Math.floor(Math.random() * workPhrases.length)]
+    }
+
+    componentDidMount(){
+        let myInterval = setInterval(this.randomPhrase, 5000)
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.type !== this.state.type) {
+            this.setState({ type: nextProps.phrase });
+        }
+    }
+
+    randomPhrase = () => {
+        console.log('randomPhrase chamado')
+        if (this.state.type === 'break') {
+            this.setState({ phrase: breakPhrases[Math.floor(Math.random() * breakPhrases.length)] })
+        } else {
+            this.setState({ phrase: workPhrases[Math.floor(Math.random() * workPhrases.length)] })
+        }
     }
 
     render() {
         return (
-            <Text style={styles.phrase}>{randomPhrase(this.props.phrase)}</Text>
+            <Text style={styles.phrase}>{this.state.phrase}</Text>
         )
-
-
     }
 }
 
@@ -35,7 +57,7 @@ const workPhrases = [
     'People say nothing is impossible, but I do nothing every day.',
     'Life is hard, like javascript',
     'Life is like a sewer… what you get out of it depends on what you put into it.',
-    'Damn, looks like we have a  bug here...tap start, we gotta fix that!',
+    'Damn, looks like we have a  bug here...we gotta fix that!',
     'Work work work!',
 
 ]
@@ -50,12 +72,4 @@ const breakPhrases = [
     'Its break time baby!'
 
 ]
-
-export let randomPhrase = (type) => {
-    if (type === 'break') {
-        return breakPhrases[Math.floor(Math.random() * breakPhrases.length)];
-    } else {
-        return workPhrases[Math.floor(Math.random() * workPhrases.length)]
-    }
-}
 
