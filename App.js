@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, StatusBar  } from 'react-native';
 
 import Timer from './src/components/Timer'
 
@@ -23,6 +23,7 @@ export default class App extends Component {
   render() {
     return (
       <View style={[styles.container, { backgroundColor: this.state.color }]}>
+      < StatusBar translucent backgroundColor={this.state.color} />
         <Timer parentColor={this.handleColorChange}/>
       </View>
     );
