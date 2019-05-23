@@ -1,7 +1,7 @@
 
 
 import React, { Component } from 'react';
-import { Text, Animated, StyleSheet } from 'react-native';
+import { Text, Animated, StyleSheet, View } from 'react-native';
 
 export default class Phrases extends Component {
     constructor(props) {
@@ -13,11 +13,19 @@ export default class Phrases extends Component {
     state = {
         type: 'work',
         interval: '',
-        phrase: workPhrases[Math.floor(Math.random() * workPhrases.length)]
+        phrase: workPhrases[Math.floor(Math.random() * workPhrases.length)],
+        fadeAnim: new Animated.Value(1),  // Initial value for opacity: 0
     }
 
-    componentDidMount(){
-        let myInterval = setInterval(this.randomPhrase, 5000)
+
+    componentWillUpdate() {
+
+    }
+
+    componentDidMount() {
+        let myInterval = setInterval(this.randomPhrase, 10000)
+        //setInterval(this.loopAnimatedStart, 2500)
+        //setInterval(this.loopAnimatedEnd, 2500)
     }
 
     componentWillReceiveProps(nextProps) {
@@ -26,18 +34,50 @@ export default class Phrases extends Component {
         }
     }
 
+
+    loopAnimatedStart = () => {
+        this.state.fadeAnim.setValue(0);
+        Animated.timing(                  // Animate over time
+            this.state.fadeAnim,            // The animated value to drive
+            {
+                toValue: 1,                    // Animate to opacity: 1 (opaque)
+                duration: 4500,              // Make it take a while
+            }
+        ).start(() => {
+            Animated.timing(                  
+                this.state.fadeAnim,            
+                {
+                    toValue: 0,                    
+                    duration: 4500,              
+                }
+            ).start();
+        });
+    }
+
     randomPhrase = () => {
+        this.loopAnimatedStart();
         console.log('randomPhrase chamado')
         if (this.state.type === 'break') {
-            this.setState({ phrase: breakPhrases[Math.floor(Math.random() * breakPhrases.length)] })
+
+            this.setState({
+                phrase: breakPhrases[Math.floor(Math.random() * breakPhrases.length)]
+            })
+
         } else {
-            this.setState({ phrase: workPhrases[Math.floor(Math.random() * workPhrases.length)] })
+            this.setState({
+                phrase: workPhrases[Math.floor(Math.random() * workPhrases.length)]
+            })
+            
+
+
         }
     }
 
     render() {
+        let { fadeAnim } = this.state;
         return (
-            <Text style={styles.phrase}>{this.state.phrase}</Text>
+            <Animated.Text style={{ ...styles.phrase, opacity: fadeAnim }}>{this.state.phrase}</Animated.Text>
+
         )
     }
 }
