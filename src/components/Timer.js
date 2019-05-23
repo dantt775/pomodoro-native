@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { TouchableOpacity, StyleSheet, Text, View, Animated } from 'react-native';
 
 
-import Phrases, { randomPhrase }  from './utils/Phrases';
+import Phrases, { randomPhrase }  from './Phrases';
 import Info from './Info';
 
 

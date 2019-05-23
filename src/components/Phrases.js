@@ -14,16 +14,19 @@ export default class Phrases extends Component {
         type: 'work',
         interval: '',
         phrase: workPhrases[Math.floor(Math.random() * workPhrases.length)],
-        fadeAnim: new Animated.Value(1),  // Initial value for opacity: 0
+        fadeAnim: new Animated.Value(0),  // Initial value for opacity: 0
     }
 
 
-    componentWillUpdate() {
+    componentWillMount(){     
 
+        setInterval(this.randomPhrase, 10000)
+        this.loopAnimatedStart();
     }
 
     componentDidMount() {
-        let myInterval = setInterval(this.randomPhrase, 10000)
+        
+        
         //setInterval(this.loopAnimatedStart, 2500)
         //setInterval(this.loopAnimatedEnd, 2500)
     }
@@ -41,22 +44,20 @@ export default class Phrases extends Component {
             this.state.fadeAnim,            // The animated value to drive
             {
                 toValue: 1,                    // Animate to opacity: 1 (opaque)
-                duration: 4500,              // Make it take a while
+                duration: 5000,              // Make it take a while
             }
         ).start(() => {
             Animated.timing(                  
                 this.state.fadeAnim,            
                 {
                     toValue: 0,                    
-                    duration: 4500,              
+                    duration: 5000,              
                 }
-            ).start();
+            ).start(this.loopAnimatedStart);
         });
     }
 
     randomPhrase = () => {
-        this.loopAnimatedStart();
-        console.log('randomPhrase chamado')
         if (this.state.type === 'break') {
 
             this.setState({
